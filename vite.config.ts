@@ -9,9 +9,18 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
+      build: {
+        outDir: 'dist',
+        sourcemap: false,
+        rollupOptions: {
+          output: {
+            manualChunks: undefined,
+          }
+        }
+      },
       plugins: [react()],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+        'process.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY),
       },
       resolve: {
         alias: {

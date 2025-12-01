@@ -1,0 +1,59 @@
+# Netlify Configuration for SLEM Multi Service
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18.17.0"
+  NPM_VERSION = "9.8.1"
+
+# Redirect rules for SPA (Single Page Application)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Cache optimization for static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache for images
+[[headers]]
+  for = "/*.{jpg,jpeg,png,gif,webp,svg}"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# HTML files - no cache
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# Context for different deployment branches
+[context.production]
+  command = "npm run build"
+  publish = "dist"
+
+[context.deploy-preview]
+  command = "npm run build"
+  publish = "dist"
+
+[context.branch-deploy]
+  command = "npm run build"
+  publish = "dist"
+
+# Environment variables (add in Netlify dashboard)
+# VITE_GEMINI_API_KEY = "your_api_key_here"
